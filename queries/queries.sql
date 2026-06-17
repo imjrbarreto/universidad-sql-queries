@@ -26,9 +26,10 @@ WHERE cuatrimestre = 1 AND curso = 3 AND id_grado = 7;
 
 -- 6. Retorna un llistat dels professors/es juntament amb el nom del departament al qual estan vinculats. El llistat ha de retornar quatre columnes, primer cognom, segon cognom, nom i nom del departament. El resultat estarà ordenat alfabèticament de menor a major pels cognoms i el nom. (apellido1, apellido2, nombre, departamento)
 SELECT p.apellido1, p.apellido2, p.nombre, d.nombre AS departamento
-FROM persona p
-INNER JOIN departamento d ON d.id = p.id
-ORDER BY p.apellido1 ASC, p.apellido2 ASC, p.nombre ASC;
+FROM profesor pf
+INNER JOIN persona p ON p.id = pf.id_profesor
+INNER JOIN departamento d ON d.id = pf.id_departamento
+ORDER BY apellido1 ASC, apellido2 ASC, nombre ASC;
 
 -- 7. Retorna un llistat amb el nom de les assignatures, any d'inici i any de fi del curs escolar de l'alumne/a amb NIF 26902806M. (nombre, anyo_inicio, anyo_fin)
 SELECT a.nombre, ce.anyo_inicio, ce.anyo_fin
@@ -39,7 +40,7 @@ INNER JOIN persona p ON p.id = asma.id_alumno
 WHERE p.nif = '26902806M';
 
 -- 8. Retorna un llistat amb el nom de tots els departaments que tenen professors/es que imparteixen alguna assignatura en el Grau en Enginyeria Informàtica (Pla 2015). (nombre)
-SELECT d.nombre AS nombre_departamento, a.nombre AS nombre_asignatura
+SELECT DISTINCT d.nombre
 FROM departamento d
 INNER JOIN profesor pf ON pf.id_departamento = d.id
 INNER JOIN asignatura a ON a.id_profesor = pf.id_profesor
@@ -102,33 +103,33 @@ FROM persona
 WHERE tipo = 'alumno';
 
 -- 17. Calcula quants alumnes van néixer en 1999. (total)
-SELECT COUNT(*) AS total_alumnos_nacidos_1999
+SELECT COUNT(*) AS total
 FROM persona
 WHERE YEAR(fecha_nacimiento) = 1999;
 
 -- 18. Calcula quants professors/es hi ha en cada departament. El resultat només ha de mostrar dues columnes, una amb el nom del departament i una altra amb el nombre de professors/es que hi ha en aquest departament. El resultat només ha d'incloure els departaments que tenen professors/es associats i haurà d'estar ordenat de major a menor pel nombre de professors/es. (departamento, total)
-SELECT d.nombre AS departamento, COUNT(p.id_profesor) AS total_profesores
+SELECT d.nombre AS departamento, COUNT(p.id_profesor) AS total
 FROM departamento d
 INNER JOIN profesor p ON p.id_departamento = d.id
 GROUP BY d.nombre
 ORDER BY total_profesores DESC;
 
 -- 19. Retorna un llistat amb tots els departaments i el nombre de professors/es que hi ha en cadascun d'ells. Tingui en compte que poden existir departaments que no tenen professors/es associats. Aquests departaments també han d'aparèixer en el llistat. (departamento, total)
-SELECT d.nombre AS departamento, COUNT(p.id_profesor) AS total_profesores
+SELECT d.nombre AS departamento, COUNT(pf.id_profesor) AS total
 FROM departamento d
-LEFT JOIN profesor p ON p.id_departamento = d.id
+LEFT JOIN profesor pf ON pf.id_departamento = d.id
 GROUP BY d.nombre
-ORDER BY total_profesores DESC;
+ORDER BY total DESC;
 
 -- 20. Retorna un llistat amb el nom de tots els graus existents en la base de dades i el nombre d'assignatures que té cadascun. Tingues en compte que poden existir graus que no tenen assignatures associades. Aquests graus també han d'aparèixer en el llistat. El resultat haurà d'estar ordenat de major a menor pel nombre d'assignatures. (grau, total)
-SELECT g.nombre AS grado, COUNT(a.id_grado) AS total_asignaturas
+SELECT g.nombre AS grau, COUNT(a.id_grado) AS total
 FROM grado g
 LEFT JOIN asignatura a ON a.id_grado = g.id
 GROUP BY g.nombre
 ORDER BY total_asignaturas DESC;
 
 -- 21. Retorna un llistat amb el nom de tots els graus existents en la base de dades i el nombre d'assignatures que té cadascun, dels graus que tinguin més de 40 assignatures associades. (grau, total)
-SELECT g.nombre AS grado, COUNT(a.id_grado) AS total_asignaturas
+SELECT g.nombre AS grau, COUNT(a.id_grado) AS total
 FROM grado g
 INNER JOIN asignatura a ON a.id_grado = g.id
 GROUP BY g.nombre
