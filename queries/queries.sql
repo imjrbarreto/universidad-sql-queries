@@ -145,7 +145,7 @@ GROUP BY g.id, g.nombre, a.tipo;
 -- 23. Retorna un llistat que mostri quants alumnes s'han matriculat d'alguna assignatura en cadascun dels cursos escolars. El resultat haurà de mostrar dues columnes, una columna amb l'any d'inici del curs escolar i una altra amb el nombre d'alumnes matriculats. (anyo_inicio, total)
 SELECT ce.anyo_inicio AS `anyo_inicio`, COUNT(DISTINCT m.id_alumno) AS total
 FROM curso_escolar AS ce
-LEFT JOIN alumno_se_matricula_asignatura AS m ON m.id_curso_escolar = ce.id
+JOIN alumno_se_matricula_asignatura AS m ON m.id_curso_escolar = ce.id
 GROUP BY ce.id, ce.anyo_inicio
 ORDER BY ce.anyo_inicio;
 
