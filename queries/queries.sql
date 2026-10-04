@@ -149,4 +149,10 @@ ORDER BY total DESC;
 
 
 -- 26. Retorna un llistat amb els professors/es que tenen un departament associat i que no imparteixen cap assignatura. (apellido1, apellido2, nombre)
+SELECT p.apellido1, p.apellido2, p.nombre
+FROM persona AS p
+JOIN profesor AS pf ON pf.id_profesor = p.id
+JOIN departamento AS d ON d.id = pf.id_departamento
+LEFT JOIN asignatura AS a ON a.id_profesor = pf.id_profesor
+WHERE p.tipo = 'profesor' AND a.id IS NULL;
 
