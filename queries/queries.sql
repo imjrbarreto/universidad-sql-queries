@@ -146,7 +146,11 @@ ORDER BY total DESC;
 
 
 -- 25. Retorna totes les dades de l'alumne/a més jove. (*)
-
+SELECT *
+FROM persona
+WHERE tipo = 'alumno' AND fecha_nacimiento = (
+  SELECT MAX(fecha_nacimiento) FROM persona WHERE tipo = 'alumno'
+);
 
 -- 26. Retorna un llistat amb els professors/es que tenen un departament associat i que no imparteixen cap assignatura. (apellido1, apellido2, nombre)
 SELECT p.apellido1, p.apellido2, p.nombre
